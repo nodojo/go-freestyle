@@ -2,38 +2,86 @@ package main
 
 import "fmt"
 
-// global variables declared outside of functions
-//var name = "foo" // direct assignment, type is automatically inferred (this is only possible in the global scope when using the keyword var)
-//var firstName string = "foo" // direct assignment, type is explicitly defined
-//var lastName string // initialized as the default value of the type (empty string in this case)
+// weapon type
+// axe
+// sword
+// wooden stick
+// knife
+type WeaponType int
 
-// preferred declaration format versus the declaration above
-// var (
-// 	name             = "foo"
-// 	firstName string = "foo"
-// 	lastName  string
+// String() functions can be "attached" to custom types (our enum in this case) so that a string value can be set and accessed
+func (w WeaponType) String() string {
+	switch w {
+	case Axe:
+		return "AXE"
+	case Sword:
+		return "SWORD"
+	case WoodenStick:
+		return "WOODENSTICK"
+	case Knife:
+		return "KNIFE"
+	}
+
+	return ""
+}
+
+// // manually typing in incrementing integers
+// const (
+// 	Axe         WeaponType = 1
+// 	Sword       WeaponType = 2
+// 	WoodenStick WeaponType = 3
+// 	Knife       WeaponType = 4
 // )
 
-// constants are almost always only defined in the global namespace
-// const version = 1
-
-// constant variable names always begin with a lowercase character
+// using iota which sets the first property value to 0 then increments the value set for each following property
 const (
-	version = 1
-	keyLen  = 10
+	Axe WeaponType = iota
+	Sword
+	WoodenStick
+	Knife
 )
 
+func getDamage(weaponType WeaponType) int {
+	switch weaponType {
+	case Axe:
+		return 100
+	case Sword:
+		return 90
+	case WoodenStick:
+		return 1
+	case Knife:
+		return 40
+	default:
+		// panic is an exception that stops the program and outputs a stack trace with the message you set for it
+		panic("weapon does not exist")
+	}
+}
+
+// // first example (uses strings instead of our "enums")
+// func getDamage(weaponType string) int {
+// 	switch weaponType {
+// 	case "axe":
+// 		return 100
+// 	case "sword":
+// 		return 90
+// 	case "woodenStick":
+// 		return 1
+// 	case "knife":
+// 		return 40
+// 	default:
+// 		// panic is an exception that stops the program and outputs a stack trace with the message you set for it
+// 		panic("weapon does not exist")
+// 	}
+// }
+
 func main() {
-	// local variables don't require you to use the var keyword
-	// version := 1           // the := operator means the type will be inferred (int in this case)
-	// otherVersion := "bar"  // inferred as a string by the compiler
-	// anotherVersion := 10.1 // inferred as a float32 or float64 (float32 in this case due to the small size of the number)
+	// fmt.Println("weapon damage: ", getDamage("knife"))
+	// fmt.Println("weapon damage: ", getDamage("nife")) // test panic case
+	// fmt.Println("weapon damage: ", getDamage(Knife))
 
-	// fmt.Println(version)
-	// fmt.Println(otherVersion)
-	// fmt.Println(anotherVersion)
-
-	// var version int
-
-	fmt.Println(version)
+	// by using %s here, we're telling the compiler to detect if the %s value (Axe, Sword, etc. below) has a String() function attached, then it should output the corresponding string value
+	fmt.Printf("weapon damage (%s) (%d):\n", Axe, getDamage(Axe))
+	fmt.Printf("weapon damage (%s) (%d):\n", Sword, getDamage(Sword))
+	fmt.Printf("weapon damage (%s) (%d):\n", WoodenStick, getDamage(WoodenStick))
+	fmt.Printf("weapon damage (%s) (%d):\n", Knife, getDamage(Knife))
 }
