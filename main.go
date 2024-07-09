@@ -14,6 +14,7 @@ func Uppercase(s string) string {
 	return strings.ToUpper(s)
 }
 
+// note: dependency here (hard-coded prefix) -> we don't want that
 func Prefixer(s string) string {
 	return "FOO_" + s
 }
