@@ -14,9 +14,10 @@ func Uppercase(s string) string {
 	return strings.ToUpper(s)
 }
 
-// this won't work, because TransformFunc only accepts a single string param
-func Prefixer(s string, prefix string) string {
-	return prefix + s
+func Prefixer(prefix string) TransformFunc {
+	return func(s string) string {
+		return prefix + s
+	}
 }
 
 func transformString(s string, fn TransformFunc) string {
@@ -25,5 +26,6 @@ func transformString(s string, fn TransformFunc) string {
 
 func main() {
 	fmt.Println(transformString("hello Sailor!", Uppercase))
-	fmt.Println(transformString("hello Sailor!", Prefixer))
+	fmt.Println(transformString("hello Sailor!", Prefixer("FOO_")))
+	fmt.Println(transformString("hello Sailor!", Prefixer("BAR_")))
 }
