@@ -2,6 +2,19 @@ package main
 
 import "fmt"
 
+type Position struct {
+	x, y int
+}
+
+func (p *Position) Move(val int) {
+	fmt.Println("The position is moved by:", val)
+}
+
+// embedded structs will also inherit its associated functions
+type Player struct {
+	Position
+}
+
 type Color int
 
 // implement the stringer interface (basically a fmt.Stringer)
@@ -28,6 +41,8 @@ const (
 )
 
 func main() {
+	p := Player{}
+	p.Move(1000)
 	// if a stringer interface has been implemented, the go compiler will first attempt to use that
 	fmt.Println("the color is:", ColorBlack)
 }
