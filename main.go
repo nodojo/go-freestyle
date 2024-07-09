@@ -20,5 +20,6 @@ func main() {
 	s := &Server{} // instantiate
 	s.store.Get(1)
 	s.store.Put(1, "foo")
-	// if you run this, you'll get a runtime error because the Storage interface is empty
+	// if you run this, you'll get a runtime error because the Storage interface is empty...
+	// that's because Storage is the interface and not the actual implementation
 }
