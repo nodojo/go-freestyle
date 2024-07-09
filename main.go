@@ -14,9 +14,9 @@ func Uppercase(s string) string {
 	return strings.ToUpper(s)
 }
 
-// note: dependency here (hard-coded prefix) -> we don't want that
-func Prefixer(s string) string {
-	return "FOO_" + s
+// this won't work, because TransformFunc only accepts a single string param
+func Prefixer(s string, prefix string) string {
+	return prefix + s
 }
 
 func transformString(s string, fn TransformFunc) string {
