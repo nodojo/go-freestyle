@@ -1,5 +1,7 @@
 package main
 
+// GENERICS ARE NOT SOMETHING YOU NEED TO USE OFTEN, BUT BEING AWARE THEY EXIST AND ARE AVAILABLE IS IMPORTANT
+
 import "fmt"
 
 // we're gonna make this generic
@@ -47,4 +49,7 @@ func main() {
 	// here, notice go infers the type
 	foo[int](1)
 	foo(1)
+
+	foo[string]("agg")
+	foo("agg")
 }
