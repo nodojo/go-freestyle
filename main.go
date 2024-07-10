@@ -28,15 +28,23 @@ func NewCustomMap[K comparable, V any]() *CustomMap[K, V] {
 	}
 }
 
+func foo[T any](val T) {
+	fmt.Println(val)
+}
+
 func main() {
 	// notice we initialize the map using the data types we want
-	m1 := NewCustomMap[string, int]()
-	m1.Insert("foo", 1)
-	m1.Insert("bar", 2)
-	fmt.Printf("map1: %+v\n", m1)
+	// m1 := NewCustomMap[string, int]()
+	// m1.Insert("foo", 1)
+	// m1.Insert("bar", 2)
+	// fmt.Printf("map1: %+v\n", m1)
 
-	m2 := NewCustomMap[int, float64]()
-	m2.Insert(1, 9.99)
-	m2.Insert(2, 100.3333)
-	fmt.Printf("map2: %+v\n", m2)
+	// m2 := NewCustomMap[int, float64]()
+	// m2.Insert(1, 9.99)
+	// m2.Insert(2, 100.3333)
+	// fmt.Printf("map2: %+v\n", m2)
+
+	// here, notice go infers the type
+	foo[int](1)
+	foo(1)
 }
