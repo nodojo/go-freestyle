@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 // we're gonna make this generic
 // in the brackets you're going to provide your generic types
 // our key (K) can be anything, but we need to say that's it's going to be a comparable...
@@ -27,5 +29,14 @@ func NewCustomMap[K comparable, V any]() *CustomMap[K, V] {
 }
 
 func main() {
+	// notice we initialize the map using the data types we want
+	m1 := NewCustomMap[string, int]()
+	m1.Insert("foo", 1)
+	m1.Insert("bar", 2)
+	fmt.Printf("map1: %+v\n", m1)
 
+	m2 := NewCustomMap[int, float64]()
+	m2.Insert(1, 9.99)
+	m2.Insert(2, 100.3333)
+	fmt.Printf("map2: %+v\n", m2)
 }
