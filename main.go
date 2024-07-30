@@ -7,7 +7,8 @@ type Player struct {
 	HP int
 }
 
-func TakeDamage(player Player, amount int) {
+// accept pointer to player instead of passing a copy by value
+func TakeDamage(player *Player, amount int) {
 	player.HP -= amount
 	fmt.Println("player is taking damage. New HP ->", player.HP)
 }
@@ -16,9 +17,9 @@ func main() {
 	player := Player{
 		HP: 100,
 	}
-	// golang sends a copy of player as the param to TakeDamage()...
-	// which means, if player is not a pointer then we are adjusting the copy of the player, not the actual player
-	TakeDamage(player, 10)
+
+	// send pointer to player location in memory
+	TakeDamage(&player, 10)
 
 	fmt.Printf("%+v\n", player)
 }
