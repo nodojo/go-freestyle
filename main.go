@@ -4,7 +4,10 @@ import (
 	"fmt"
 )
 
-// a pointer is an 8 byte long integer that points to a memory address
+// a pointer is an 8 byte long integer that points to a memory address.
+// two reasons to use a pointer
+// 1. if you want to modify state
+// 2.
 type Player struct {
 	HP int
 }
