@@ -1,24 +1,25 @@
 package main
 
-type BigData struct {
-	// 1 gb of memory
-	// ..
-	// ..
-	// ..
+type Database struct {
+	user string
 }
 
-func doSomethingWithData(data *BigData) {
-	// manipulate the data inside this function
+type Server struct {
+	db *Database // uintprt -> 8 bytes long
+}
+
+func (s *Server) GetUsersFromDB() string {
+	// golang is going to "dereference" the db pointer
+	// it's going to look up the memory address of the pointer
+	if s.db == nil {
+		panic("database == nil hence, is not initialized")
+	}
+	return s.db.user
 }
 
 func main() {
-	data := &BigData{} // 1 gb
-
-	// something like this would be bad -> not perfomant...
-	// which should reinforce a decision for us to use pointers
-	for i := 0; i < 10000; i++ {
-		// copy 1 gb of data inside if that function
-		// -> by using pointers instead, we will only be passing 8 bytes of pointer
-		doSomethingWithData(data)
-	}
+	// since we did not specify a database in out server, there is no valid memory address
+	// -> for this reason, you always need to check your pointers for nil
+	s := &Server{}
+	s.GetUsersFromDB()
 }
