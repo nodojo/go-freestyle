@@ -1,30 +1,23 @@
 package main
 
-import (
-	"fmt"
-)
-
-// a pointer is an 8 byte long integer that points to a memory address.
-// two reasons to use a pointer
-// 1. if you want to modify state
-// 2.
-type Player struct {
-	HP int
+type BigData struct {
+	// 1 gb of memory
+	// ..
+	// ..
+	// ..
 }
 
-// function receiver
-func (p *Player) TakeDamage(amount int) {
-	p.HP -= amount
-	fmt.Println("player is taking damage. New HP ->", p.HP)
+func doSomethingWithData(data BigData) {
+	// manipulate the data inside this function
 }
 
 func main() {
-	player := &Player{
-		HP: 100,
+	data := BigData{} // 1 gb
+
+	// something like this would be bad -> not perfomant...
+	// which should reinforce a decision for us to use pointers
+	for i := 0; i < 10000; i++ {
+		// copy 1 gb of data inside if that function
+		doSomethingWithData(data)
 	}
-
-	// send pointer to player location in memory
-	player.TakeDamage(10)
-
-	fmt.Printf("%+v\n", player)
 }
