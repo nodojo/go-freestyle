@@ -10,3 +10,9 @@ func TestCalculateValues(t *testing.T) {
 	fmt.Println("hello from our test")
 	// to print the above line when testing, run "go test -v ./..."
 }
+
+func TestCalculateValuesSpecial(t *testing.T) {
+	fmt.Println("hello from our special test")
+	// this is how to fail a test case
+	t.Fail()
+}
