@@ -1,8 +1,24 @@
 package main
 
 import (
+	"reflect"
 	"testing"
 )
+
+func TestEqualPlayers(t *testing.T) {
+	expected := Player{
+		name: "Mark",
+		hp:   100,
+	}
+	have := Player{
+		name: "Alice",
+		hp:   59,
+	}
+
+	if !reflect.DeepEqual(expected, have) {
+		t.Errorf("expected %+v but got %+v", expected, have)
+	}
+}
 
 func TestCalculateValuesSpecial(t *testing.T) {
 	var (
