@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+// NOTE: if you are using vs code, each test case (function)
+// will have "run test | debug test" controls it
 func TestEqualPlayers(t *testing.T) {
 	expected := Player{
 		name: "Mark",
