@@ -1,4 +1,5 @@
 # Go Freestyle
+
 A review and refresher of development using the Golang programming language.
 
 - [Variables](https://github.com/nodojo/go-freestyle/tree/variables)
@@ -12,3 +13,12 @@ A review and refresher of development using the Golang programming language.
 - [Generics](https://github.com/nodojo/go-freestyle/tree/generics)
 - [Pointers](https://github.com/nodojo/go-freestyle/tree/pointers)
 - [Writing tests](https://github.com/nodojo/go-freestyle/tree/writing-tests)
+
+Mastering concurrency
+
+- [Intro to goroutines and channels](https://fulltimegodev.teachable.com/courses/full-time-go-dev/lectures/44605541)
+- [Working with channels](https://fulltimegodev.teachable.com/courses/full-time-go-dev/lectures/46440819)
+- [Control flow and synchronization example](https://fulltimegodev.teachable.com/courses/full-time-go-dev/lectures/44605592)
+- [Mutexes and atomic values](https://fulltimegodev.teachable.com/courses/full-time-go-dev/lectures/44605593)
+- [Package context](https://fulltimegodev.teachable.com/courses/full-time-go-dev/lectures/44605600)
+- [Practical example](https://fulltimegodev.teachable.com/courses/full-time-go-dev/lectures/46651532)
