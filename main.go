@@ -11,6 +11,7 @@ func main() {
 	msgch <- "A"
 	msgch <- "B"
 	msgch <- "C"
+	close(msgch)
 
 	// // this only reads the first input ("A") from the channel
 	// msg := <-msgch
@@ -25,6 +26,8 @@ func main() {
 	for msg := range msgch {
 		fmt.Println(msg)
 	}
+
+	fmt.Println("done reading all the messages from the channel!")
 }
 
 // func fetchResource(n int) string {
