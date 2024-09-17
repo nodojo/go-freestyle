@@ -15,6 +15,7 @@ func main() {
 
 	// create go routine (non-blocking call)
 	go fetchResource()
+	// at this point in the code execution, fetchResource() has not completed
 }
 
 func fetchResource() string {
