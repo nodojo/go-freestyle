@@ -13,6 +13,7 @@ func main() {
 	// result := fetchResource()
 	// fmt.Println("result:", result)
 
+	// create go routine (non-blocking call)
 	go fetchResource()
 }
 
