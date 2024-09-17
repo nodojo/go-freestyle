@@ -13,6 +13,12 @@ func main() {
 	// understand that in go, there is no such thing as parallelism (goroutines don't run in parallel), it's basically concurrency
 	result := fethcResource()
 	fmt.Println("result:", result)
+
+	fethcResource()
+	fethcResource()
+	fethcResource()
+	fethcResource()
+	fethcResource()
 }
 
 func fethcResource() string {
