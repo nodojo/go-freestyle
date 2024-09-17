@@ -14,8 +14,13 @@ func main() {
 	// fmt.Println("result:", result)
 
 	// create go routine (non-blocking call)
-	go fetchResource()
+	// go fetchResource()
 	// at this point in the code execution, fetchResource() has not completed
+
+	// schedule anonymous function -> identical to "go fetchResource()"
+	go func() {
+		fetchResource()
+	}()
 }
 
 func fetchResource() string {
