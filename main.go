@@ -30,7 +30,11 @@ func main() {
 	// create never-ending for loop (behaves like a while loop)
 	// BAD! -> this will continue iterating forever (this case is automatically handled by using a range)
 	for {
-		msg := <-msgch
+		msg, ok := <-msgch
+		// this prevents the loop from running forever
+		if !ok {
+			break
+		}
 		fmt.Println("message ->", msg)
 	}
 
