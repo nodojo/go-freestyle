@@ -12,12 +12,19 @@ func main() {
 	msgch <- "B"
 	msgch <- "C"
 
-	// this only reads the first input ("A") from the channel
-	msg := <-msgch
-	fmt.Println("msg is:", msg)
-	// this will read the next input ("B")
-	msg = <-msgch
-	fmt.Println("msg is:", msg)
+	// // this only reads the first input ("A") from the channel
+	// msg := <-msgch
+	// fmt.Println("msg is:", msg)
+	// // this will read the next input ("B")
+	// msg = <-msgch
+	// fmt.Println("msg is:", msg)
+
+	// range over a channel (this is our consumer)
+	// this will display all inputs, but throw a "fatal error: all goroutines are asleep - deadlock" error...
+	// .. this is because no stopping opint has been set
+	for msg := range msgch {
+		fmt.Println(msg)
+	}
 }
 
 // func fetchResource(n int) string {
