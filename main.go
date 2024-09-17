@@ -23,8 +23,15 @@ func main() {
 	// range over a channel (this is our consumer)
 	// this will display all inputs, but throw a "fatal error: all goroutines are asleep - deadlock" error...
 	// .. this is because no stopping opint has been set
-	for msg := range msgch {
-		fmt.Println(msg)
+	// for msg := range msgch {
+	// 	fmt.Println(msg)
+	// }
+
+	// create never-ending for loop (behaves like a while loop)
+	// BAD! -> this will continue iterating forever (this case is automatically handled by using a range)
+	for {
+		msg := <-msgch
+		fmt.Println("message ->", msg)
 	}
 
 	fmt.Println("done reading all the messages from the channel!")
