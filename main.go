@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -17,13 +18,19 @@ func main() {
 	// go fetchResource()
 	// at this point in the code execution, fetchResource() has not completed
 
-	// schedule anonymous function -> identical to "go fetchResource()"
+	// // schedule anonymous function -> identical to "go fetchResource()"
+	// go func() {
+	// 	fetchResource()
+	// }()
+
+	// this won't work -> where is the println? it's nowhere.. because it's running async -> threads getting threads
 	go func() {
-		fetchResource()
+		result := fetchResource(1)
+		fmt.Println(result)
 	}()
 }
 
-func fetchResource() string {
+func fetchResource(n int) string {
 	time.Sleep(time.Second * 2)
-	return "some result"
+	return fmt.Sprintf("result %d", n)
 }
