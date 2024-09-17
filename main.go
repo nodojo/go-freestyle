@@ -1,5 +1,26 @@
 package main
 
-func main() {
+import (
+	"fmt"
+)
 
+func main() {
+	// if you write to a channel faster than your reading from it, at some point it will become full
+	// in programming, when you are specifying a size allocation, use values that are the power of 2 (these are values a computer can understand easily)
+	msgch := make(chan string, 128)
+	msgch <- "A"
+	msgch <- "B"
+	msgch <- "C"
+
+	// this only reads the first input ("A") from the channel
+	msg := <-msgch
+	fmt.Println("msg is:", msg)
+	// this will read the next input ("B")
+	msg = <-msgch
+	fmt.Println("msg is:", msg)
 }
+
+// func fetchResource(n int) string {
+// 	time.Sleep(time.Second * 2)
+// 	return fmt.Sprintf("result %d", n)
+// }
