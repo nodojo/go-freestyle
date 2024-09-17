@@ -42,11 +42,12 @@ func main() {
 	// THIS CODE WILL NEVER EXECUTE BECAUSE OF THE DEADLOCK CREATED ABOVE!
 
 	// so either buffer the channel, or create a goroutine to read from the channel (below)
+	// so this below unblocks the channel...
 	go func() {
 		result := <-resultch
 		fmt.Println(result)
 	}()
-
+	// ... and then this writes to the channel
 	resultch <- "foo"
 }
 
