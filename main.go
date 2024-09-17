@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"time"
 )
 
 // the basic reason golang was designed:
@@ -24,13 +23,34 @@ func main() {
 	// }()
 
 	// this won't work -> where is the println? it's nowhere.. because it's running async -> threads getting threads
+	// go func() {
+	// 	result := fetchResource(1)
+	// 	fmt.Println(result)
+	// }()
+
+	// think of channels as a tunnel, and people on the other side of the tunnel will receive what you put into the tunnel
+	// two types of channels (it's a common practice to append "ch" to any variable that represents a channel)
+	// 1. unbuffered channel
+	// 2. buffered channel
+	// **note: a channel in golang will always block if it's full
+	// THIS EXAMPLE CREATES A DEADLOACK BECAUSE IT'S UNBUFFERED WHICH MEANS IT IS FULL WHEN WE SEND "foo" TO IT
+	resultch := make(chan string) // -> make me a channel of type string (unbuffered) // -> holds ONLY whatever is sent to it, in this case "foo" *which means it will block, because it's full
+	// resultch := make(chan string, 10) // -> make me a channel of type string (buffered with a buffer size of 10) -> holds 10
+	// resultch <- "foo"
+	// result := <-resultch
+	// fmt.Println(result)
+	// THIS CODE WILL NEVER EXECUTE BECAUSE OF THE DEADLOCK CREATED ABOVE!
+
+	// so either buffer the channel, or create a goroutine to read from the channel (below)
 	go func() {
-		result := fetchResource(1)
+		result := <-resultch
 		fmt.Println(result)
 	}()
+
+	resultch <- "foo"
 }
 
-func fetchResource(n int) string {
-	time.Sleep(time.Second * 2)
-	return fmt.Sprintf("result %d", n)
-}
+// func fetchResource(n int) string {
+// 	time.Sleep(time.Second * 2)
+// 	return fmt.Sprintf("result %d", n)
+// }
