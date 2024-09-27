@@ -49,15 +49,22 @@ func (s *Server) handleMessage(msg string) {
 
 func main() {
 	server := newServer()
+
+	// add func to spin up another goroutine
+	// this allows code execution to continue without blocking our `go server.start()` line below
+	go func() {
+		time.Sleep(time.Second * 5)
+	}()
+
 	go server.start() // schedule as a goroutine
 
-	// one thing we could do is pipe in a message
-	// server.msgch <- "hey do this!"
-	for i := 0; i < 100; i++ {
-		server.sendMessage(fmt.Sprintf("handle this number %d", i))
-	}
-	// another way would be to call a function that performs the same action
-	server.sendMessage("hey! do this...")
-	// since everything is happening asynchronously, pause the program so that we can see it working
-	time.Sleep(time.Second * 5)
+	// // one thing we could do is pipe in a message
+	// // server.msgch <- "hey do this!"
+	// for i := 0; i < 100; i++ {
+	// 	server.sendMessage(fmt.Sprintf("handle this number %d", i))
+	// }
+	// // another way would be to call a function that performs the same action
+	// server.sendMessage("hey! do this...")
+	// // since everything is happening asynchronously, pause the program so that we can see it working
+	// time.Sleep(time.Second * 5)
 }
