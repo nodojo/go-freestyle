@@ -53,6 +53,9 @@ func main() {
 
 	// one thing we could do is pipe in a message
 	// server.msgch <- "hey do this!"
+	for i := 0; i < 100; i++ {
+		server.sendMessage(fmt.Sprintf("handle this number %d", i))
+	}
 	// another way would be to call a function that performs the same action
 	server.sendMessage("hey! do this...")
 	// since everything is happening asynchronously, pause the program so that we can see it working
