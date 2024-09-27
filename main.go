@@ -9,6 +9,7 @@ type State struct {
 }
 
 func (s *State) setState(i int) {
+	// add the new state to teh count atomically
 	atomic.AddInt32(&s.count, int32(i))
 }
 
