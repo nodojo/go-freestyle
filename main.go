@@ -13,9 +13,9 @@ type State struct {
 
 func (s *State) setState(i int) {
 	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	s.count = i
-	// note: every Lock() must have a Unlock() to free up the locked resources
-	s.mu.Unlock()
 }
 
 func main() {
