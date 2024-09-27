@@ -13,7 +13,7 @@ type Server struct {
 func newServer() *Server {
 	return &Server{
 		quitch: make(chan struct{}),
-		msgch:  make(chan string),
+		msgch:  make(chan string, 128), // now we buffer the msg channel
 	}
 }
 
@@ -29,12 +29,18 @@ func (s *Server) loop() {
 		case <-s.quitch:
 			// do some stuff when we need to quit
 		case msg := <-s.msgch:
-			// do some stuff when we have a message
-			_ = msg // this prevents the compiler from complaining
+			s.handleMessage(msg)
+		default:
+			// this is just to satisfy the compiler... obviously, it does nothing
 		}
 	}
 }
 
-func main() {
+func (s *Server) handleMessage(msg string) {
+	fmt.Println("message received:", msg)
+}
 
+func main() {
+	server := newServer()
+	server.start()
 }
