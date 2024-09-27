@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 type Server struct {
 	// quitch chan bool  // will allocate 1 byte
@@ -20,6 +23,10 @@ func newServer() *Server {
 func (s *Server) start() {
 	fmt.Println("server starting")
 	s.loop() // this will block
+}
+
+func (s *Server) sendMessage(msg string) {
+	s.msgch <- msg
 }
 
 func (s *Server) loop() {
@@ -45,5 +52,9 @@ func main() {
 	go server.start() // schedule as a goroutine
 
 	// one thing we could do is pipe in a message
-	server.msgch <- "hey do this!"
+	// server.msgch <- "hey do this!"
+	// another way would be to call a function that performs the same action
+	server.sendMessage("hey! do this...")
+	// since everything is happening asynchronously, pause the program so that we can see it working
+	time.Sleep(time.Second * 5)
 }
