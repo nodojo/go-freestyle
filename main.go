@@ -29,18 +29,27 @@ func (s *Server) sendMessage(msg string) {
 	s.msgch <- msg
 }
 
+func (s *Server) quit() {
+	// could do this...
+	// close(s.quitch)
+	// ...or this
+	s.quitch <- struct{}{}
+}
+
 func (s *Server) loop() {
 	for {
 		// selects are specifically for channels
 		select {
-		case <-s.quitch:
-			// do some stuff when we need to quit
+		case <-s.quitch: // when quit() is called, it will cause this case to get triggered
+			fmt.Println("quitting server")
+			break
 		case msg := <-s.msgch:
 			s.handleMessage(msg)
 		default:
 			// this is just to satisfy the compiler... obviously, it does nothing
 		}
 	}
+	fmt.Println("server is shutting down gracefully")
 }
 
 func (s *Server) handleMessage(msg string) {
@@ -54,6 +63,7 @@ func main() {
 	// this allows code execution to continue without blocking our `go server.start()` line below
 	go func() {
 		time.Sleep(time.Second * 5)
+		server.quit()
 	}()
 
 	go server.start() // schedule as a goroutine
