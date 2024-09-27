@@ -22,12 +22,12 @@ func newServer() *Server {
 
 func (s *Server) start() {
 	fmt.Println("server starting")
-	s.loop() // this will block
+	s.loop()
 }
 
-func (s *Server) sendMessage(msg string) {
-	s.msgch <- msg
-}
+// func (s *Server) sendMessage(msg string) {
+// 	s.msgch <- msg
+// }
 
 func (s *Server) quit() {
 	// could do this...
@@ -37,16 +37,16 @@ func (s *Server) quit() {
 }
 
 func (s *Server) loop() {
+	// go allows you to declare a loop (here our declared loop is named "mainloop")
+mainloop:
 	for {
 		// selects are specifically for channels
 		select {
 		case <-s.quitch: // when quit() is called, it will cause this case to get triggered
 			fmt.Println("quitting server")
-			break
+			break mainloop // this allows us to trigger a break on the outer for loop when this case is satisfied
 		case msg := <-s.msgch:
 			s.handleMessage(msg)
-		default:
-			// this is just to satisfy the compiler... obviously, it does nothing
 		}
 	}
 	fmt.Println("server is shutting down gracefully")
@@ -66,7 +66,7 @@ func main() {
 		server.quit()
 	}()
 
-	go server.start() // schedule as a goroutine
+	server.start()
 
 	// // one thing we could do is pipe in a message
 	// // server.msgch <- "hey do this!"
