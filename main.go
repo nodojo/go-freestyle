@@ -42,5 +42,5 @@ func (s *Server) handleMessage(msg string) {
 
 func main() {
 	server := newServer()
-	server.start()
+	server.start() // this is blocking because of the loop above
 }
