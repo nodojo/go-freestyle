@@ -42,5 +42,8 @@ func (s *Server) handleMessage(msg string) {
 
 func main() {
 	server := newServer()
-	server.start() // this is blocking because of the loop above
+	go server.start() // schedule as a goroutine
+
+	// one thing we could do is pipe in a message
+	server.msgch <- "hey do this!"
 }
