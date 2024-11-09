@@ -65,6 +65,7 @@ func fetchUserID() (string, error) {
 // this represents any call where we can't control how long it's going to take
 func thirdpartyHTTPCall() (string, error) {
 	// mimic latency
-	time.Sleep(time.Millisecond * 500)
+	time.Sleep(time.Millisecond * 500) // fails -> context deadline exceeded
+	// time.Sleep(time.Millisecond * 90) // succeeds -> within context threshold
 	return "user id: 1", nil
 }
