@@ -14,11 +14,13 @@ type UserProfile struct {
 }
 
 func main() {
+	start := time.Now()
 	userProfile, err := handleGetUserProfile(10)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println(userProfile)
+	fmt.Println("fetching user profile took ", time.Since(start))
 }
 
 func handleGetUserProfile(id int) (*UserProfile, error) {
