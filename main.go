@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"sync"
 	"time"
 )
 
@@ -31,30 +32,49 @@ type Response struct {
 }
 
 func handleGetUserProfile(id int) (*UserProfile, error) {
-	// create channel and buffer for the 3 responses (comments, likes, friends)
-	respch := make(chan Response, 3)
+	// create channel and buffer for the 3 responses (comments, likes, friends).
+	// coordinate workers (goroutines) so we will know when they are done
+	var (
+		respch = make(chan Response, 3)
+		wg     = &sync.WaitGroup{}
+	)
 
-	// schedule this in a goroutine
-	go getComments(id, respch)
-	go getLikes(id, respch)
-	go getFriends(id, respch)
+	// schedule this in goroutines.
+	// we are making 3 requests, each inside its own goroutine...
+	go getComments(id, respch, wg)
+	go getLikes(id, respch, wg)
+	go getFriends(id, respch, wg)
+	// ...this means, we need to add 3 to the waitgroup
+	wg.Add(3)
+	// block until the wg counter == 0, then unblock
+	wg.Wait()
+	// now that wg is unblocked, close the channel
+	close(respch) // this signals the range below to break out of the loop
 
 	// range over our response channel
-	// DEADLOCK -> because range "keeps ranging" and doesn't know when to exit
+	userProfile := &UserProfile{}
 	for resp := range respch {
-		fmt.Println(resp)
+		if resp.err != nil {
+			return nil, resp.err
+		}
+
+		// switch on the type of data being sent
+		// note: data types can be replaced with custom data types for cleaner logic
+		switch msg := resp.data.(type) {
+		case int:
+			userProfile.Likes = msg // automatically casts to int
+		case []int:
+			userProfile.Friends = msg
+		case []string:
+			userProfile.Comments = msg
+		}
 	}
 
-	return &UserProfile{
-		// ID:       id,
-		// Comments: comments,
-		// Likes:    likes,
-		// Friends:  friends,
-	}, nil
+	return userProfile, nil
 }
 
 // we won't need the return because we are going to inject the data into the channel
-func getComments(id int, respch chan Response) {
+func getComments(id int, respch chan Response, wg *sync.WaitGroup) {
 	time.Sleep(time.Millisecond * 200) // mimic http round trip
 	comments := []string{
 		"hey, that was great",
@@ -65,23 +85,29 @@ func getComments(id int, respch chan Response) {
 		data: comments,
 		err:  nil,
 	}
+	// each time worker is done, signal completion by calling wg.Done()
+	wg.Done()
 }
 
 // we won't need the return because we are going to inject the data into the channel
-func getLikes(id int, respch chan Response) {
+func getLikes(id int, respch chan Response, wg *sync.WaitGroup) {
 	time.Sleep(time.Millisecond * 200) // mimic http round trip
 	respch <- Response{
 		data: 11,
 		err:  nil,
 	}
+	// each time worker is done, signal completion by calling wg.Done()
+	wg.Done()
 }
 
 // we won't need the return because we are going to inject the data into the channel
-func getFriends(id int, respch chan Response) {
+func getFriends(id int, respch chan Response, wg *sync.WaitGroup) {
 	time.Sleep(time.Millisecond * 100) // mimic http round trip
 	friendIds := []int{11, 34, 854, 455}
 	respch <- Response{
 		data: friendIds,
 		err:  nil,
 	}
+	// each time worker is done, signal completion by calling wg.Done()
+	wg.Done()
 }
