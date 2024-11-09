@@ -12,22 +12,29 @@ func main() {
 	// we need a way to cancel third party calls when they don't return in a reasonable amount of time
 	// -> this is where the use of context comes in
 	start := time.Now()
-	userID, err := fetchUserID()
+	// create a context and include metadata in it
+	// *IMPORTANT* -> goroutines are prone to data race conditions... but if you use a context
+	// and set valueswithin the context, it's safe to use inside of goroutines <- *IMPORTANT*
+	ctx := context.WithValue(context.Background(), "username", "nodojo")
+	userID, err := fetchUserID(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Printf("the response took %v:%+v\n", time.Since(start), userID)
 }
 
-func fetchUserID() (string, error) {
+func fetchUserID(ctx context.Context) (string, error) {
 	// what is the maximum amount of time we are willing to wait for a response?
 	// the cancel here allows us to manually cancel the call.
 	// each time you create a context, you must provide a parent context...
 	// if you don't have one, you can make a new context by using context.Background().
 	// we are saying that any call that takes longer than 100ms will be canceled
-	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*100)
+	ctx, cancel := context.WithTimeout(ctx, time.Millisecond*100)
 	// no matter what happens, if this function is going to return always cancel
 	defer cancel()
+
+	val := ctx.Value("username")
+	fmt.Println("the value = ", val)
 
 	type result struct {
 		userId string
@@ -65,7 +72,7 @@ func fetchUserID() (string, error) {
 // this represents any call where we can't control how long it's going to take
 func thirdpartyHTTPCall() (string, error) {
 	// mimic latency
-	time.Sleep(time.Millisecond * 500) // fails -> context deadline exceeded
-	// time.Sleep(time.Millisecond * 90) // succeeds -> within context threshold
+	// time.Sleep(time.Millisecond * 500) // fails -> context deadline exceeded
+	time.Sleep(time.Millisecond * 90) // succeeds -> within context threshold
 	return "user id: 1", nil
 }
