@@ -17,6 +17,8 @@ func main() {
 	app := fiber.New()
 	apiv1 := app.Group("/api/v1")
 
-	apiv1.Get("/user", api.HandleGetUser)
+	apiv1.Get("/user", api.HandleGetUsers)
+	apiv1.Get("/user/:id", api.HandleGetUser)
+
 	app.Listen(*listenAddr)
 }
