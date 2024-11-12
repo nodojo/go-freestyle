@@ -6,5 +6,10 @@ import (
 
 func main() {
 	app := fiber.New()
+	app.Get("/foo", handleFoo)
 	app.Listen(":5000")
+}
+
+func handleFoo(c *fiber.Ctx) error {
+	return c.JSON(map[string]string{"mgs": "working just fine!"})
 }
