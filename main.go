@@ -4,6 +4,7 @@ import (
 	"flag"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/nodojo/go-freestyle/api"
 )
 
 // run to change the port to :7000:
@@ -14,18 +15,8 @@ func main() {
 	flag.Parse()
 
 	app := fiber.New()
-	// apiv1 := app.Group("/api/v1")
+	apiv1 := app.Group("/api/v1")
 
-	app.Get("/foo", handleFoo)
-	// appv1.Get("/user", handleUser)
-	app.Get("/user", handleUser)
+	apiv1.Get("/user", api.HandleGetUser)
 	app.Listen(*listenAddr)
-}
-
-func handleFoo(c *fiber.Ctx) error {
-	return c.JSON(map[string]string{"mgs": "working just fine!"})
-}
-
-func handleUser(c *fiber.Ctx) error {
-	return c.JSON(map[string]string{"user": "James Foo"})
 }
