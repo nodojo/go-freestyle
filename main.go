@@ -16,10 +16,11 @@ type UserProfile struct {
 
 func main() {
 	start := time.Now()
-	userProfile, err := handleGetUserProfile(10)
+	userProfile, err := handleGetUserProfile()
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	fmt.Println(userProfile)
 	fmt.Println("fetching user profile took ", time.Since(start))
 }
@@ -31,7 +32,7 @@ type Response struct {
 	err  error
 }
 
-func handleGetUserProfile(id int) (*UserProfile, error) {
+func handleGetUserProfile() (*UserProfile, error) {
 	// create channel and buffer for the 3 responses (comments, likes, friends).
 	// coordinate workers (goroutines) so we will know when they are done
 	var (
@@ -41,9 +42,9 @@ func handleGetUserProfile(id int) (*UserProfile, error) {
 
 	// schedule this in goroutines.
 	// we are making 3 requests, each inside its own goroutine...
-	go getComments(id, respch, wg)
-	go getLikes(id, respch, wg)
-	go getFriends(id, respch, wg)
+	go getComments(respch, wg)
+	go getLikes(respch, wg)
+	go getFriends(respch, wg)
 	// ...this means, we need to add 3 to the waitgroup
 	wg.Add(3)
 	// block until the wg counter == 0, then unblock
@@ -74,7 +75,7 @@ func handleGetUserProfile(id int) (*UserProfile, error) {
 }
 
 // we won't need the return because we are going to inject the data into the channel
-func getComments(id int, respch chan Response, wg *sync.WaitGroup) {
+func getComments(respch chan Response, wg *sync.WaitGroup) {
 	time.Sleep(time.Millisecond * 200) // mimic http round trip
 	comments := []string{
 		"hey, that was great",
@@ -85,29 +86,32 @@ func getComments(id int, respch chan Response, wg *sync.WaitGroup) {
 		data: comments,
 		err:  nil,
 	}
+
 	// each time worker is done, signal completion by calling wg.Done()
 	wg.Done()
 }
 
 // we won't need the return because we are going to inject the data into the channel
-func getLikes(id int, respch chan Response, wg *sync.WaitGroup) {
+func getLikes(respch chan Response, wg *sync.WaitGroup) {
 	time.Sleep(time.Millisecond * 200) // mimic http round trip
 	respch <- Response{
 		data: 11,
 		err:  nil,
 	}
+
 	// each time worker is done, signal completion by calling wg.Done()
 	wg.Done()
 }
 
 // we won't need the return because we are going to inject the data into the channel
-func getFriends(id int, respch chan Response, wg *sync.WaitGroup) {
+func getFriends(respch chan Response, wg *sync.WaitGroup) {
 	time.Sleep(time.Millisecond * 100) // mimic http round trip
 	friendIds := []int{11, 34, 854, 455}
 	respch <- Response{
 		data: friendIds,
 		err:  nil,
 	}
+
 	// each time worker is done, signal completion by calling wg.Done()
 	wg.Done()
 }
